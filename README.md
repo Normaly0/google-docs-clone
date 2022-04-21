@@ -1,6 +1,6 @@
 <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Normaly0/random-quote-app"> <img alt="node-current" src="https://img.shields.io/node/v/v"> <img alt="npm version" src="https://img.shields.io/badge/npm-v8.1.0-blue"> <img alt="license" src="https://img.shields.io/badge/License-GPL%20-orange">
 
-# :file_cabinet: Google Docs Clone
+# :memo: Google Docs Clone
 
 A Google Docs Clone build with React, Socket.io and Mongoose.
 
