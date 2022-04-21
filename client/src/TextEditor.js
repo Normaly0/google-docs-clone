@@ -1,10 +1,11 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import Quill from 'quill';
 import "quill/dist/quill.snow.css";
 import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
+
+import Navbar from "./Navbar";
 
 const TOOLBAR_OPTIONS = [
     [{header: [1, 2, 3, 4, 5, 6, false]}],
@@ -22,8 +23,6 @@ function TextEditor() {
     const [socket, setSocket] = useState();
     const [quill, setQuill] = useState();
     const { id: documentId } = useParams();
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const s = io("http://localhost:3001");
@@ -106,15 +105,9 @@ function TextEditor() {
         setQuill(q);
     }, []);
 
-    function redirectHome() {
-        navigate("/home")
-    }
-
     return (
         <>
-            <nav className = "nav-bar">
-                <button onClick = {redirectHome}>Home</button>
-            </nav>
+            <Navbar />
             <div className="container" ref={wrapperRef}>
             </div>
         </>
