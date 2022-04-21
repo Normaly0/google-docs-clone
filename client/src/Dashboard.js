@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import {v4 as uuidV4} from 'uuid';
 
+import Navbar from './Navbar';
 
 function Dashboard() {
 
@@ -30,6 +31,7 @@ function Dashboard() {
 
     return (
         <>
+            <Navbar />
             <h1>Dashboard</h1>
             <div className = "dashboard-container">
                 {data[0] !== undefined &&
