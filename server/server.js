@@ -18,22 +18,27 @@ io.on("connection", socket => {
         const document = await findOrCreateDocument(documentId);
         
         socket.join(documentId);
-        socket.emit("load-document", document.data);
+        socket.emit("load-document", [document.data, document.title]);
         
         socket.on("send-changes", delta => {
             socket.broadcast.to(documentId).emit("receive-changes", delta);
         })
 
-        socket.on("save-document", async (data, img) => {
+        socket.on("save-document", async (data, img, title) => {
             await Document.findByIdAndUpdate(documentId, { data });
             await Document.findByIdAndUpdate(documentId, { img });
+            await Document.findByIdAndUpdate(documentId, { title });
         })
 
     })
     
     socket.on("get-dashboard-data", async () => {
-        const data = await Document.find({}).select('_id img');
+        const data = await Document.find({}).select('_id img title');
         socket.emit("load-all", data)
+    })
+
+    socket.on("delete-document", async id => {
+        await Document.findByIdAndDelete(id)
     })
 
 })

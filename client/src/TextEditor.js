@@ -22,6 +22,7 @@ function TextEditor() {
 
     const [socket, setSocket] = useState();
     const [quill, setQuill] = useState();
+    const [title, setTitle] = useState();
     const { id: documentId } = useParams();
 
     useEffect(() => {
@@ -38,9 +39,15 @@ function TextEditor() {
         
         socket.emit("get-document", documentId);
         
-        socket.once("load-document", document => {
-            quill.setContents(document);
-            quill.enable();;
+        socket.once("load-document", data => {
+
+            quill.setContents(data[0]);
+            quill.enable();
+            
+            if (data[1] !== null) {
+                document.querySelector("input").value = data[1];
+                setTitle(data[1]);
+            } 
         })
     }, [socket, quill, documentId])
 
@@ -83,7 +90,7 @@ function TextEditor() {
             html2canvas(screenshotTarget).then((canvas) => {
                 const base64image = canvas.toDataURL("image/png");
                 
-                socket.emit("save-document", quill.getContents(), base64image);
+                socket.emit("save-document", quill.getContents(), base64image, title);
             });
             
         }, 2000)
@@ -91,7 +98,11 @@ function TextEditor() {
         return (() => {
             clearInterval(interval);
         })
-    }, [socket, quill])
+    }, [socket, quill, title])
+
+    function handleTitle(e) {
+        setTitle(e.target.value);
+    }
 
     const wrapperRef = useCallback((wrapper) => {
         if (wrapper == null) return
@@ -108,6 +119,9 @@ function TextEditor() {
     return (
         <>
             <Navbar />
+            <div className = "document-title">
+                <input type = "text" defaultValue={"Untitled Document"} onInput = {handleTitle} />
+            </div>
             <div className="container" ref={wrapperRef}>
             </div>
         </>
